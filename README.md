@@ -51,3 +51,16 @@ public class Test {
 ```
 
 # Adding to build
+
+Add to repositories
+```gradle
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+```
+
+Add as a dependency
+```gradle
+dependencies {
+	implementation 'com.github.Gav06:Brimstone:1.0'
+}
