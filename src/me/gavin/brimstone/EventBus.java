@@ -4,21 +4,25 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 
 /**
  * 
  * @author Gav06
  * @since 4/20/2021
  *
+ *        <p>
+ *        Main event system class to handle everything
+ * 
  */
 
-@SuppressWarnings({ "unused", "deprecation" })
+@SuppressWarnings("deprecation")
 public class EventBus {
 
 	/**
 	 * List of listeners used by the event bus
 	 */
-	private final ArrayList<ListenerData> listenerList = new ArrayList<>();
+	private final HashSet<ListenerData> listenerMap = new HashSet<>();
 
 	/**
 	 * Value deciding if actions are printed or not
@@ -32,7 +36,7 @@ public class EventBus {
 	 * 
 	 */
 	public void register(final Object listenerObject) {
-		for (Method method : listenerObject.getClass().getDeclaredMethods()) {
+		for (final Method method : listenerObject.getClass().getDeclaredMethods()) {
 			if (!method.isAccessible()) {
 				method.setAccessible(true);
 			}
@@ -40,7 +44,7 @@ public class EventBus {
 			if (method.isAnnotationPresent(Listener.class)) {
 				if (method.getParameters().length > 0) {
 					ListenerData data = new ListenerData(method, method.getParameters()[0].getType(), listenerObject);
-					listenerList.add(data);
+					listenerMap.add(data);
 					if (logging) {
 						System.out.println("added data - " + data);
 					}
@@ -55,10 +59,10 @@ public class EventBus {
 	 * @param listenerObject class to from event bus
 	 */
 	public void unregister(final Object listenerObject) {
-		for (ListenerData obj : listenerList) {
+		for (ListenerData obj : listenerMap) {
 			// Have be careful here with ConcurrentModificationExceptions
 			if (obj.getParent() == listenerObject.getClass()) {
-				listenerList.remove(obj);
+				listenerMap.remove(obj);
 				if (logging) {
 					System.out.println("removed data - " + obj);
 				}
@@ -77,7 +81,7 @@ public class EventBus {
 		final ArrayList<ListenerData> tempDataList = new ArrayList<>();
 
 		// finding methods to invoke to put in temp list
-		for (ListenerData data : listenerList) {
+		for (final ListenerData data : listenerMap) {
 			if (data.getEvent() == eventObject.getClass()) {
 				tempDataList.add(data);
 			}
@@ -87,7 +91,7 @@ public class EventBus {
 		tempDataList.sort(Comparator.comparing(data -> -data.getAnnotation().priority()));
 
 		// invoking the methods
-		for (ListenerData data : tempDataList) {
+		for (final ListenerData data : tempDataList) {
 			try {
 				data.getMethod().invoke(data.getParent(), eventObject);
 				if (logging) {
@@ -104,8 +108,17 @@ public class EventBus {
 	 * 
 	 * @param flag
 	 */
-	public void setDebugLogging(boolean flag) {
+	public void setDebugLogging(final boolean flag) {
 		logging = flag;
+	}
+	
+	/**
+	 * 
+	 * Clears all registered objects from the map
+	 * 
+	 */
+	public void clearMap() {
+		listenerMap.clear();
 	}
 
 }

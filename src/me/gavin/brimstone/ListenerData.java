@@ -5,8 +5,11 @@ import java.lang.reflect.Method;
 /**
  * 
  * @author Gav06
- * <p>
- * Small class to store variables relating to the event bus
+ * @since 4/20/2021
+ * 
+ *        <p>
+ *        Small class to store variables relating to the event bus
+ * 
  */
 public class ListenerData {
 
@@ -40,9 +43,10 @@ public class ListenerData {
 		this.event = event;
 		this.parent = parent;
 	}
-	
+
 	/**
 	 * Used for getting the annotation (for handling priorities)
+	 * 
 	 * @return Annotation used in the event listener
 	 */
 	public Listener getAnnotation() {
@@ -51,6 +55,7 @@ public class ListenerData {
 
 	/**
 	 * Used for invoking the method and getting various attributes
+	 * 
 	 * @return Event listener method
 	 */
 	public Method getMethod() {
@@ -59,6 +64,7 @@ public class ListenerData {
 
 	/**
 	 * Used for checking if method should be invoked
+	 * 
 	 * @return Event paramater in listener method
 	 */
 	public Class<?> getEvent() {
@@ -67,6 +73,7 @@ public class ListenerData {
 
 	/**
 	 * Used for invoking the method, as an object is needed since it is non-static
+	 * 
 	 * @return Parent object
 	 */
 	public Object getParent() {
@@ -78,7 +85,6 @@ public class ListenerData {
 	 */
 	@Override
 	public String toString() {
-		return "method: " + method.getName() + " event: " + event.getName() + " parent: "
-				+ parent.getClass().getName();
+		return "method: " + method.getName() + " event: " + event.getName() + " parent: " + parent.getClass().getName();
 	}
 }
