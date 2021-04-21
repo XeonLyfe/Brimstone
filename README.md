@@ -14,8 +14,7 @@ public void onEvent(Object o) {
 
 # Usage / Speed
 
-(it can run this test in around 50-80 ms)
-Probably not a great test, but still faster than you would ever really need.
+This isn't a very great test, but the output of this can be seen below:
 
 ```java
 public class Test {
@@ -26,37 +25,54 @@ public class Test {
 	
 	EventBus eventSys;
 	
+	int count = 0;
+	
 	public Test() {
-		System.out.println("Creating event bus");
 		eventSys = new EventBus();
 		
-		System.out.println("registering test class");
 		eventSys.register(this);
 		
-		
-		System.out.println("running tests");
 		long runningTotal = 0L;
 		
+		long lowestTime = Long.MAX_VALUE;
+		long highestTime = Long.MIN_VALUE;
+		
 		for (int i = 0; i < 100; i++) {
-			runningTotal += getEventFireTime();
+			long fireTime = getEventFireTime();
+			if (fireTime < lowestTime)
+				lowestTime = fireTime;
+			else if (fireTime > highestTime)
+				highestTime = fireTime;
+			
+			runningTotal += fireTime;
 		}
 		
-		System.out.println("time elapsed: " + runningTotal + "ms");
+		double average = runningTotal / 100;
+		System.out.println("shortest time: " + lowestTime + "ms longest time: " + highestTime + "ms");
+		System.out.println("average time elapsed per " + (count / 100) + " events: " + average + "ms");
+		System.out.println("total time elapsed over " + count + " events: " + runningTotal + "ms");
 	}
 	
 	@Listener
-	public void testListener(Object o) {
+	public void testListener(Object event) {
 	}
 	
 	public long getEventFireTime() {
 		long startTime = System.currentTimeMillis();
 		for (int i = 0; i < 10000; i++) {
 			eventSys.dispatch(new Object());
+			count++;
 		}
 		
 		return System.currentTimeMillis() - startTime;
 	}
 }
+```
+Output (results may vary):
+```
+shortest time: 0ms longest time: 8ms
+average time elapsed per 10000 events: 1.0ms
+total time elapsed over 1000000 events: 130ms
 ```
 
 # Adding to build
