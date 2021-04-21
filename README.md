@@ -3,6 +3,15 @@ Simple and fast event system using reflections
 
 last event system that i'm making (I promise)
 
+Has support for event priorities as seen:
+
+```java
+@Listener(priority = 100)
+public void onEvent(Object o) {
+	// do stuff
+}
+```
+
 # Usage / Speed
 
 (it can run this test in around 80-120 ms)
