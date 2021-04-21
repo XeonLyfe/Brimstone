@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 
 /**
  * 
@@ -22,7 +21,7 @@ public class EventBus {
 	/**
 	 * List of listeners used by the event bus
 	 */
-	private final HashSet<ListenerData> listenerMap = new HashSet<>();
+	private final ArrayList<ListenerData> listeners = new ArrayList<>();
 
 	/**
 	 * Value deciding if actions are printed or not
@@ -44,7 +43,7 @@ public class EventBus {
 			if (method.isAnnotationPresent(Listener.class)) {
 				if (method.getParameters().length > 0) {
 					ListenerData data = new ListenerData(method, method.getParameters()[0].getType(), listenerObject);
-					listenerMap.add(data);
+					listeners.add(data);
 					if (logging) {
 						System.out.println("added data - " + data);
 					}
@@ -59,10 +58,10 @@ public class EventBus {
 	 * @param listenerObject class to from event bus
 	 */
 	public void unregister(final Object listenerObject) {
-		for (ListenerData obj : listenerMap) {
+		for (ListenerData obj : listeners) {
 			// Have be careful here with ConcurrentModificationExceptions
 			if (obj.getParent() == listenerObject.getClass()) {
-				listenerMap.remove(obj);
+				listeners.remove(obj);
 				if (logging) {
 					System.out.println("removed data - " + obj);
 				}
@@ -81,13 +80,13 @@ public class EventBus {
 		final ArrayList<ListenerData> tempDataList = new ArrayList<>();
 
 		// finding methods to invoke to put in temp list
-		for (final ListenerData data : listenerMap) {
+		for (final ListenerData data : listeners) {
 			if (data.getEvent() == eventObject.getClass()) {
 				tempDataList.add(data);
 			}
 		}
 
-		// sorting by priority
+		// sorting by priority (high to low)
 		tempDataList.sort(Comparator.comparing(data -> -data.getAnnotation().priority()));
 
 		// invoking the methods
@@ -95,7 +94,7 @@ public class EventBus {
 			try {
 				data.getMethod().invoke(data.getParent(), eventObject);
 				if (logging) {
-					System.out.println("called invoked event - " + data);
+					System.out.println("called event - " + data);
 				}
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
@@ -118,7 +117,7 @@ public class EventBus {
 	 * 
 	 */
 	public void clearMap() {
-		listenerMap.clear();
+		listeners.clear();
 	}
 
 }
