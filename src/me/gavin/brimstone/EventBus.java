@@ -22,7 +22,7 @@ public class EventBus {
 	/**
 	 * List of listeners used by the event bus
 	 */
-	private final HashSet<ListenerData> listenerMap = new HashSet<>();
+	private final ArrayList<ListenerData> listenerMap = new ArrayList<>();
 
 	/**
 	 * Value deciding if actions are printed or not
