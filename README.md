@@ -14,8 +14,8 @@ public void onEvent(Object o) {
 
 # Usage / Speed
 
-(it can run this test in around 80-120 ms)
-Probably not a great test, but still pretty good speed.
+(it can run this test in around 50-80 ms)
+Probably not a great test, but still faster than you would ever really need.
 
 ```java
 public class Test {
