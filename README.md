@@ -87,5 +87,5 @@ repositories {
 Add as a dependency
 ```gradle
 dependencies {
-	implementation 'com.github.Gav06:Brimstone:1.1'
+	implementation 'com.github.Gav06:Brimstone:1.2'
 }
