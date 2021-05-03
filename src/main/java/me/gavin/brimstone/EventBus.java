@@ -60,7 +60,7 @@ public class EventBus {
     public void unregister(final Object listenerObject) {
         for (ListenerData obj : listeners) {
             // Have be careful here with ConcurrentModificationExceptions
-            if (obj.getParent() == listenerObject.getClass()) {
+            if (obj.getParent() == listenerObject) {
                 listeners.remove(obj);
                 if (logging) {
                     System.out.println("removed data - " + obj);
