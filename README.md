@@ -28,7 +28,7 @@ public class Test {
 		
 		eventSys.register(this);
 		
-		
+		eventSys.dispatch("Hello world!");
 	}
 	
 	@Listener
