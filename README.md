@@ -1,8 +1,6 @@
 # Brimstone
 Simple and fast event system using reflections
 
-last event system that i'm making (I promise)
-
 Has support for event priorities as seen:
 
 ```java
