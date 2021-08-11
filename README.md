@@ -45,13 +45,13 @@ Hello world!
 Add to repositories
 ```gradle
 repositories {
-	maven { url 'https://jitpack.io' }
+	maven { url 'https://beriidevelopment.github.io/mvn/' }
 }
 ```
 
 Add as a dependency
 ```gradle
 dependencies {
-	implementation 'com.github.Gav06:Brimstone:1.2.1'
+	implementation 'me.gavin:Brimstone:1.2.1'
 }
 ```
